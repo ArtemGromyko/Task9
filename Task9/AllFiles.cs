@@ -12,21 +12,37 @@ namespace Task9
         public string Path
         { 
             get { return path; } 
-            set { path = value; dirInfo = new DirectoryInfo(path); } 
+            set 
+            {
+                path = value;
+                if (Directory.Exists(path))
+                    dirInfo = new DirectoryInfo(path);
+                else
+                    dirInfo = null;
+            } 
         }
         public AllFiles(string p)
         {
             Path = p;
-            dirInfo = new DirectoryInfo(path);
         }
         public void DisplayFiles()
         {
+            if(dirInfo == null)
+            {
+                Console.WriteLine("There is no such directory");
+                return;
+            }
             int index = 0;
             foreach(FileInfo s in dirInfo.GetFiles())
-                Console.WriteLine(index+++": "+s.Name);
+                Console.WriteLine(index++ +": "+s.Name);
         }
         public void ReadFile(int index)
         {
+            if (dirInfo == null)
+            {
+                Console.WriteLine("There is no such directory");
+                return;
+            }
             string[] files = Directory.GetFiles(path);
             if(index >= 0 && index < files.Length)
             {
@@ -38,7 +54,10 @@ namespace Task9
                     Console.WriteLine("\ntext:\n\n" + text);
                 }
             }
-            
+            else
+            {
+                Console.WriteLine("invalid index");
+            }
         }
     }
 }
